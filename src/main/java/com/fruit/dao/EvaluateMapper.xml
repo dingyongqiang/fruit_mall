@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fruit.dao.EvaluateMapper">
+  <resultMap id="BaseResultMap" type="com.fruit.model.Evaluate">
+    <id column="eva_Id" jdbcType="INTEGER" property="evaId" />
+    <result column="eva_User" jdbcType="INTEGER" property="evaUser.userId" />
+    <result column="eva_Content" jdbcType="VARCHAR" property="evaContent" />
+    <result column="eva_Date" jdbcType="DATE" property="evaDate" />
+    <result column="eva_Goods" jdbcType="INTEGER" property="evaGoods.goodsId" />
+    <result column="eva_State" jdbcType="INTEGER" property="evaState" />
+    <result column="eva_level" jdbcType="INTEGER" property="evaLevel" />
+  </resultMap>
+  <resultMap type="com.fruit.model.Evaluate" id="BaseResultMapJoinObj" extends="BaseResultMap">
+		<association property="evaUser" column="eva_User" javaType="com.fruit.model.Users" select="com.fruit.dao.UsersMapper.selectByPrimaryKey"></association>
+		<association property="evaGoods" column="eva_Goods"  javaType="com.fruit.model.Goods" select="com.fruit.dao.GoodsMapper.selectByPrimaryKey"></association>
+	</resultMap>
+  <select id="selectId"   resultMap="BaseResultMapJoinObj">
+   select   *
+    from evaluate
+  where eva_Id=(select max(eva_Id) from evaluate);
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMapJoinObj">
+    select   *
+    from evaluate
+    where eva_Id = #{evaId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from evaluate
+    where eva_Id = #{evaId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.fruit.model.Evaluate">
+    insert into evaluate (eva_Id, eva_User, eva_Content, 
+      eva_Date, eva_Goods, eva_State, 
+      eva_level)
+    values (#{evaId,jdbcType=INTEGER}, #{evaUser.userId,jdbcType=INTEGER}, #{evaContent,jdbcType=VARCHAR}, 
+      #{evaDate,jdbcType=DATE}, #{evaGoods.goodsId,jdbcType=INTEGER}, #{evaState,jdbcType=INTEGER}, 
+      #{evaLevel,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fruit.model.Evaluate">
+  <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="evaId">
+          SELECT LAST_INSERT_ID()
+      	</selectKey>
+    insert into evaluate
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="evaId != null">
+        eva_Id,
+      </if>
+      <if test="evaUser.userId != null">
+        eva_User,
+      </if>
+      <if test="evaContent != null">
+        eva_Content,
+      </if>
+      <if test="evaDate != null">
+        eva_Date,
+      </if>
+      <if test="evaGoods.goodsId != null">
+        eva_Goods,
+      </if>
+      
+        eva_State,
+    
+      <if test="evaLevel != null">
+        eva_level,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="evaId != null">
+        #{evaId,jdbcType=INTEGER},
+      </if>
+      <if test="evaUser.userId != null">
+        #{evaUser.userId,jdbcType=INTEGER},
+      </if>
+      <if test="evaContent != null">
+        #{evaContent,jdbcType=VARCHAR},
+      </if>
+      <if test="evaDate != null">
+        #{evaDate,jdbcType=DATE},
+      </if>
+      <if test="evaGoods.goodsId != null">
+        #{evaGoods.goodsId,jdbcType=INTEGER},
+      </if>
+      
+        1,
+    
+      <if test="evaLevel != null">
+        #{evaLevel,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fruit.model.Evaluate">
+    update evaluate
+    <set>
+      <if test="evaUser.userId != null">
+        eva_User = #{evaUser.userId,jdbcType=INTEGER},
+      </if>
+      <if test="evaContent != null">
+        eva_Content = #{evaContent,jdbcType=VARCHAR},
+      </if>
+      <if test="evaDate != null">
+        eva_Date = #{evaDate,jdbcType=DATE},
+      </if>
+      <if test="evaGoods.goodsId != null">
+        eva_Goods = #{evaGoods.goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="evaState != null">
+        eva_State = #{evaState,jdbcType=INTEGER},
+      </if>
+      <if test="evaLevel != null">
+        eva_level = #{evaLevel,jdbcType=INTEGER},
+      </if>
+    </set>
+    where eva_Id = #{evaId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fruit.model.Evaluate">
+    update evaluate
+    set eva_User = #{evaUser.userId,jdbcType=INTEGER},
+      eva_Content = #{evaContent,jdbcType=VARCHAR},
+      eva_Date = #{evaDate,jdbcType=DATE},
+      eva_Goods = #{evaGoods.goodsId,jdbcType=INTEGER},
+      eva_State = #{evaState,jdbcType=INTEGER},
+      eva_level = #{evaLevel,jdbcType=INTEGER}
+    where eva_Id = #{evaId,jdbcType=INTEGER}
+  </update>
+  <select id="findEvaByGoodsId" parameterType="java.lang.Integer" resultMap="BaseResultMapJoinObj">
+		select * from evaluate where eva_Goods=#{id} and eva_State &gt; 0
+	</select>
+	<select id="findEvaByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMapJoinObj">
+		select * from evaluate where eva_User=#{id} and eva_State &gt; 0
+	</select>
+	<select id="findAllEvalute" resultMap="BaseResultMapJoinObj">
+		select * from evaluate where eva_State &gt; 0
+	</select>
+	<select id="findAllEvaluteLikeContent" parameterType="java.lang.String" resultMap="BaseResultMapJoinObj">
+		select * from evaluate where eva_State &gt; 0 and eva_Content like '%${value}%'
+	</select>
+</mapper>

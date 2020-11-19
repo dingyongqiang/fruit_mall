@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fruit.dao.AddressMapper">
+  <resultMap id="BaseResultMap"   type="com.fruit.model.Address">
+    <id column="addr_Id" jdbcType="INTEGER" property="addrId" />
+    <result column="addr_province" jdbcType="VARCHAR" property="addrProvince" />
+    <result column="addr_city" jdbcType="VARCHAR" property="addrCity" />
+    <result column="addr_area" jdbcType="VARCHAR" property="addrArea" />
+    <result column="addr_detail" jdbcType="VARCHAR" property="addrDetail" />
+    <result column="addr_user" jdbcType="INTEGER" property="addrUser" />
+    <result column="addr_zipcode" jdbcType="VARCHAR" property="addrZipcode" />
+    <result column="addr_phone" jdbcType="VARCHAR" property="addrPhone" />
+    <result column="addr_nickname" jdbcType="VARCHAR" property="addrNickname" />
+    <result column="addr_state" jdbcType="INTEGER" property="addrState" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    addr_Id, addr_province, addr_city, addr_area, addr_detail, addr_user, addr_zipcode, 
+    addr_phone, addr_nickname, addr_state
+  </sql>
+  <select id="findAddrByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select * from address where addr_user=#{id} and addr_state=1
+	</select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from address
+    where addr_Id = #{addrId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from address
+    where addr_Id = #{addrId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.fruit.model.Address">
+    insert into address (addr_Id, addr_province, addr_city, 
+      addr_area, addr_detail, addr_user, 
+      addr_zipcode, addr_phone, addr_nickname, 
+      addr_state)
+    values (#{addrId,jdbcType=INTEGER}, #{addrProvince,jdbcType=VARCHAR}, #{addrCity,jdbcType=VARCHAR}, 
+      #{addrArea,jdbcType=VARCHAR}, #{addrDetail,jdbcType=VARCHAR}, #{addrUser,jdbcType=INTEGER}, 
+      #{addrZipcode,jdbcType=VARCHAR}, #{addrPhone,jdbcType=VARCHAR}, #{addrNickname,jdbcType=VARCHAR}, 
+      #{addrState,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fruit.model.Address">
+    REPLACE into address
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="addrId != null">
+        addr_Id,
+      </if>
+      <if test="addrProvince != null">
+        addr_province,
+      </if>
+      <if test="addrCity != null">
+        addr_city,
+      </if>
+      <if test="addrArea != null">
+        addr_area,
+      </if>
+      <if test="addrDetail != null">
+        addr_detail,
+      </if>
+      <if test="addrUser != null">
+        addr_user,
+      </if>
+      <if test="addrZipcode != null">
+        addr_zipcode,
+      </if>
+      <if test="addrPhone != null">
+        addr_phone,
+      </if>
+      <if test="addrNickname != null">
+        addr_nickname,
+      </if>
+      <if test="addrState != null">
+        addr_state,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="addrId != null">
+        #{addrId,jdbcType=INTEGER},
+      </if>
+      <if test="addrProvince != null">
+        #{addrProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="addrCity != null">
+        #{addrCity,jdbcType=VARCHAR},
+      </if>
+      <if test="addrArea != null">
+        #{addrArea,jdbcType=VARCHAR},
+      </if>
+      <if test="addrDetail != null">
+        #{addrDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="addrUser != null">
+        #{addrUser,jdbcType=INTEGER},
+      </if>
+      <if test="addrZipcode != null">
+        #{addrZipcode,jdbcType=VARCHAR},
+      </if>
+      <if test="addrPhone != null">
+        #{addrPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="addrNickname != null">
+        #{addrNickname,jdbcType=VARCHAR},
+      </if>
+      <if test="addrState != null">
+        #{addrState,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fruit.model.Address">
+    update address
+    <set>
+      <if test="addrProvince != null">
+        addr_province = #{addrProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="addrCity != null">
+        addr_city = #{addrCity,jdbcType=VARCHAR},
+      </if>
+      <if test="addrArea != null">
+        addr_area = #{addrArea,jdbcType=VARCHAR},
+      </if>
+      <if test="addrDetail != null">
+        addr_detail = #{addrDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="addrUser != null">
+        addr_user = #{addrUser,jdbcType=INTEGER},
+      </if>
+      <if test="addrZipcode != null">
+        addr_zipcode = #{addrZipcode,jdbcType=VARCHAR},
+      </if>
+      <if test="addrPhone != null">
+        addr_phone = #{addrPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="addrNickname != null">
+        addr_nickname = #{addrNickname,jdbcType=VARCHAR},
+      </if>
+      <if test="addrState != null">
+        addr_state = #{addrState,jdbcType=INTEGER},
+      </if>
+    </set>
+    where addr_Id = #{addrId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fruit.model.Address">
+    update address
+    set addr_province = #{addrProvince,jdbcType=VARCHAR},
+      addr_city = #{addrCity,jdbcType=VARCHAR},
+      addr_area = #{addrArea,jdbcType=VARCHAR},
+      addr_detail = #{addrDetail,jdbcType=VARCHAR},
+      addr_user = #{addrUser,jdbcType=INTEGER},
+      addr_zipcode = #{addrZipcode,jdbcType=VARCHAR},
+      addr_phone = #{addrPhone,jdbcType=VARCHAR},
+      addr_nickname = #{addrNickname,jdbcType=VARCHAR},
+      addr_state = #{addrState,jdbcType=INTEGER}
+    where addr_Id = #{addrId,jdbcType=INTEGER}
+  </update>
+</mapper>

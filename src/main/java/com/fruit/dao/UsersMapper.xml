@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fruit.dao.UsersMapper">
+  <resultMap id="BaseResultMap" type="com.fruit.model.Users">
+    <id column="user_Id" jdbcType="INTEGER" property="userId" />
+    <result column="user_Name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_Pass" jdbcType="VARCHAR" property="userPass" />
+    <result column="user_Phone" jdbcType="VARCHAR" property="userPhone" />
+    <result column="user_Email" jdbcType="VARCHAR" property="userEmail" />
+    <result column="user_State" jdbcType="INTEGER" property="userState" />
+    <result column="user_Img" jdbcType="VARCHAR" property="userImg" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_Id, user_Name, user_Pass, user_Phone, user_Email, user_State, user_Img
+  </sql>
+  <select id="findAll" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from users
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from users
+    where user_Id = #{userId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from users
+    where user_Id = #{userId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.fruit.model.Users">
+    insert into users (user_Id, user_Name, user_Pass, 
+      user_Phone, user_Email, user_State, 
+      user_Img)
+    values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{userPass,jdbcType=VARCHAR}, 
+      #{userPhone,jdbcType=VARCHAR}, #{userEmail,jdbcType=VARCHAR}, #{userState,jdbcType=INTEGER}, 
+      #{userImg,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fruit.model.Users">
+    insert into users
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_Id,
+      </if>
+      <if test="userName != null">
+        user_Name,
+      </if>
+      <if test="userPass != null">
+        user_Pass,
+      </if>
+      <if test="userPhone != null">
+        user_Phone,
+      </if>
+      <if test="userEmail != null">
+        user_Email,
+      </if>
+      <if test="userState != null">
+        user_State,
+      </if>
+      <if test="userImg != null">
+        user_Img,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPass != null">
+        #{userPass,jdbcType=VARCHAR},
+      </if>
+      <if test="userPhone != null">
+        #{userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="userEmail != null">
+        #{userEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="userState != null">
+        #{userState,jdbcType=INTEGER},
+      </if>
+      <if test="userImg != null">
+        #{userImg,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fruit.model.Users">
+    update users
+    <set>
+      <if test="userName != null">
+        user_Name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPass != null">
+        user_Pass = #{userPass,jdbcType=VARCHAR},
+      </if>
+      <if test="userPhone != null">
+        user_Phone = #{userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="userEmail != null">
+        user_Email = #{userEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="userState != null">
+        user_State = #{userState,jdbcType=INTEGER},
+      </if>
+      <if test="userImg != null">
+        user_Img = #{userImg,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_Id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fruit.model.Users">
+    update users
+    set user_Name = #{userName,jdbcType=VARCHAR},
+      user_Pass = #{userPass,jdbcType=VARCHAR},
+      user_Phone = #{userPhone,jdbcType=VARCHAR},
+      user_Email = #{userEmail,jdbcType=VARCHAR},
+      user_State = #{userState,jdbcType=INTEGER},
+      user_Img = #{userImg,jdbcType=VARCHAR}
+    where user_Id = #{userId,jdbcType=INTEGER}
+  </update>
+  
+   <update id="changeGoodsState" parameterType="com.fruit.model.Users">
+    update users
+    set   user_State = #{userState,jdbcType=INTEGER}
+    where user_Id = #{userId,jdbcType=INTEGER}
+  </update>
+  <select id="findUserLikeName" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from users where user_Name like '%${value}%' and user_State &gt; 0
+	</select>
+	<select id="findUserByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from users where user_Name = #{userName,jdbcType=VARCHAR} and user_State &gt; 0
+	</select>
+</mapper>

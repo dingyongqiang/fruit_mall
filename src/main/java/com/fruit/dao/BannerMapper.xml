@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fruit.dao.BannerMapper">
+  <resultMap id="BaseResultMap" type="com.fruit.model.Banner">
+    <id column="banner_Id" jdbcType="INTEGER" property="bannerId" />
+    <result column="banner_Name" jdbcType="VARCHAR" property="bannerName" />
+    <result column="banner_Url" jdbcType="VARCHAR" property="bannerUrl" />
+    <result column="banner_Img" jdbcType="VARCHAR" property="bannerImg" />
+    <result column="banner_State" jdbcType="INTEGER" property="bannerState" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    banner_Id, banner_Name, banner_Url, banner_Img, banner_State
+  </sql>
+  <select id="findAllShowBanner"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from banner
+    where banner_State  &gt; 0 
+  </select>
+  
+  <select id="findAllBanner"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from banner
+  </select>
+  <update id="changeBannerState" parameterType="com.fruit.model.Banner">
+    update banner
+    set   banner_State = #{bannerState,jdbcType=INTEGER}
+    where banner_Id = #{bannerId,jdbcType=INTEGER}
+  </update>
+	<select id="findAllBannerByLikeName" parameterType="java.lang.String" resultMap="BaseResultMap">
+		  select 
+    <include refid="Base_Column_List" />
+    from banner  where banner_Name like '%${value}%' and banner_State &gt; 0
+	</select>
+	
+	
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from banner
+    where banner_Id = #{bannerId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from banner
+    where banner_Id = #{bannerId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.fruit.model.Banner">
+    insert into banner (banner_Id, banner_Name, banner_Url, 
+      banner_Img, banner_State)
+    values (#{bannerId,jdbcType=INTEGER}, #{bannerName,jdbcType=VARCHAR}, #{bannerUrl,jdbcType=VARCHAR}, 
+      #{bannerImg,jdbcType=VARCHAR}, #{bannerState,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fruit.model.Banner">
+    insert into banner
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="bannerId != null">
+        banner_Id,
+      </if>
+      <if test="bannerName != null">
+        banner_Name,
+      </if>
+      <if test="bannerUrl != null">
+        banner_Url,
+      </if>
+      <if test="bannerImg != null">
+        banner_Img,
+      </if>
+      <if test="bannerState != null">
+        banner_State,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="bannerId != null">
+        #{bannerId,jdbcType=INTEGER},
+      </if>
+      <if test="bannerName != null">
+        #{bannerName,jdbcType=VARCHAR},
+      </if>
+      <if test="bannerUrl != null">
+        #{bannerUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="bannerImg != null">
+        #{bannerImg,jdbcType=VARCHAR},
+      </if>
+      <if test="bannerState != null">
+        #{bannerState,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fruit.model.Banner">
+    update banner
+    <set>
+      <if test="bannerName != null">
+        banner_Name = #{bannerName,jdbcType=VARCHAR},
+      </if>
+      <if test="bannerUrl != null">
+        banner_Url = #{bannerUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="bannerImg != null">
+        banner_Img = #{bannerImg,jdbcType=VARCHAR},
+      </if>
+      <if test="bannerState != null">
+        banner_State = #{bannerState,jdbcType=INTEGER},
+      </if>
+    </set>
+    where banner_Id = #{bannerId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fruit.model.Banner">
+    update banner
+    set banner_Name = #{bannerName,jdbcType=VARCHAR},
+      banner_Url = #{bannerUrl,jdbcType=VARCHAR},
+      banner_Img = #{bannerImg,jdbcType=VARCHAR},
+      banner_State = #{bannerState,jdbcType=INTEGER}
+    where banner_Id = #{bannerId,jdbcType=INTEGER}
+  </update>
+</mapper>

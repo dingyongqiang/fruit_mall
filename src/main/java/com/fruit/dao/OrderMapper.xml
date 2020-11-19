@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fruit.dao.OrderMapper">
+  <resultMap id="BaseResultMap" type="com.fruit.model.Order">
+    <id column="order_Id" jdbcType="VARCHAR" property="orderId" />
+    <result column="order_User" jdbcType="INTEGER" property="orderUser.userId" />
+    <result column="order_Date" jdbcType="DATE" property="orderDate" />
+    <result column="order_Price" jdbcType="DOUBLE" property="orderPrice" />
+    <result column="order_State" jdbcType="INTEGER" property="orderState" />
+    <result column="order_UserName" jdbcType="VARCHAR" property="orderUserName" />
+    <result column="order_Phone" jdbcType="VARCHAR" property="orderPhone" />
+    <result column="order_Address" jdbcType="VARCHAR" property="orderAddress" />
+    <result column="order_ExpressNo" jdbcType="VARCHAR" property="orderExpressNo" />
+  </resultMap>
+  <resultMap type="com.fruit.utils.OrderVO" id="Base">
+		<result property="totalMoney" column="totalMoney" javaType="java.lang.Long" />
+		<result property="orderMonth" column="orderMonth" javaType="java.lang.String" />
+		<result property="sheets" column="sheets" javaType="java.lang.Integer" />
+	</resultMap>
+	<resultMap type="com.fruit.model.Order" id="BaseResultMapJoinObj" extends="BaseResultMap">
+		<association property="orderUser" column="order_User" javaType="com.fruit.model.Users" select="com.fruit.dao.UsersMapper.selectByPrimaryKey"></association>
+	</resultMap>	
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select  *
+    from `order`
+    where order_Id = #{orderId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from `order`
+    where order_Id = #{orderId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fruit.model.Order">
+    insert into `order` (order_Id, order_User, order_Date, 
+      order_Price, order_State, order_UserName, 
+      order_Phone, order_Address, order_ExpressNo
+      )
+    values (#{orderId,jdbcType=VARCHAR}, #{orderUser.userId,jdbcType=INTEGER}, #{orderDate,jdbcType=DATE}, 
+      #{orderPrice,jdbcType=DOUBLE}, #{orderState,jdbcType=INTEGER}, #{orderUser.userName,jdbcType=VARCHAR}, 
+      #{orderPhone,jdbcType=VARCHAR}, #{orderAddress,jdbcType=VARCHAR}, #{orderExpressNo,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.fruit.model.Order">
+    insert into `order`
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        order_Id,
+      </if>
+      <if test="orderUser.userId != null">
+        order_User,
+      </if>
+      <if test="orderDate != null">
+        order_Date,
+      </if>
+      <if test="orderPrice != null">
+        order_Price,
+      </if>
+      <if test="orderState != null">
+        order_State,
+      </if>
+      <if test="orderUser.userName != null">
+        order_UserName,
+      </if>
+      <if test="orderPhone != null">
+        order_Phone,
+      </if>
+      <if test="orderAddress != null">
+        order_Address,
+      </if>
+      <if test="orderExpressNo != null">
+        order_ExpressNo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderUser.userId != null">
+        #{orderUser.userId,jdbcType=INTEGER},
+      </if>
+      <if test="orderDate != null">
+        #{orderDate,jdbcType=DATE},
+      </if>
+      <if test="orderPrice != null">
+        #{orderPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="orderState != null">
+        #{orderState,jdbcType=INTEGER},
+      </if>
+      <if test="orderUser.userName != null">
+        #{orderUser.userName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderPhone != null">
+        #{orderPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="orderAddress != null">
+        #{orderAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="orderExpressNo != null">
+        #{orderExpressNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fruit.model.Order">
+    update `order`
+    <set>
+      <if test="orderUser != null">
+        order_User = #{orderUser.userId,jdbcType=INTEGER},
+      </if>
+      <if test="orderDate != null">
+        order_Date = #{orderDate,jdbcType=DATE},
+      </if>
+      <if test="orderPrice != null">
+        order_Price = #{orderPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="orderState != null">
+        order_State = #{orderState,jdbcType=INTEGER},
+      </if>
+      <if test="orderUserName!= null">
+        order_UserName = #{orderUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderPhone != null">
+        order_Phone = #{orderPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="orderAddress != null">
+        order_Address = #{orderAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="orderExpressNo != null">
+        order_ExpressNo = #{orderExpressNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where order_Id = #{orderId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fruit.model.Order">
+    update order
+    set order_User = #{orderUser.userId,jdbcType=INTEGER},
+      order_Date = #{orderDate,jdbcType=DATE},
+      order_Price = #{orderPrice,jdbcType=DOUBLE},
+      order_State = #{orderState,jdbcType=INTEGER},
+      order_UserName = #{orderUser.userName,jdbcType=VARCHAR},
+      order_Phone = #{orderPhone,jdbcType=VARCHAR},
+      order_Address = #{orderAddress,jdbcType=VARCHAR},
+      order_ExpressNo = #{orderExpressNo,jdbcType=VARCHAR}
+    where order_Id = #{orderId,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <select id="findAllOrderBySearchVO" parameterType="com.fruit.utils.OrderSearchVO" resultMap="BaseResultMapJoinObj">
+		select * from `order`
+		<where>
+			order_State &gt; 0
+			<if test="orderIdKeyword!=null and orderIdKeyword!=''">
+				and order_Id like '%${orderIdKeyword}%'
+			</if>
+			<if test="startDate!=null and startDate!=''">
+				and order_Date &gt;=#{startDate}
+			</if>
+			<if test="endDate!=null and endDate!=''">
+				and order_Date &lt;=#{endDate}
+			</if>
+			<if test="orderState!=null and orderState!=''">
+				and order_State=#{orderState}
+			</if>
+		</where>
+	</select>
+  <update id="deleteOrder" parameterType="java.lang.String">
+		update `order` set order_State=-1 where order_Id=#{id}
+	</update>
+	<update id="payOrder" parameterType="java.lang.String">
+		update  `order` set order_State=2 where order_Id=#{id}
+	</update>
+	<update id="deliverOrder" parameterType="java.lang.String">
+		update  `order` set order_State=3,order_Expressno=#{1} where order_Id=#{0}
+	</update>
+	<update id="receiveOrder" parameterType="java.lang.String">
+		update `order` set order_State=4 where order_Id=#{id}
+	</update>
+	<update id="evaOrder" parameterType="java.lang.String">
+		update `order` set order_State=5 where order_Id=#{id}
+	</update>
+  	<select id="findAllOrder" resultMap="BaseResultMapJoinObj">
+		select * from `order` where order_State &gt; 0
+	</select>
+	<select id="findOrderByUser" resultMap="BaseResultMapJoinObj">
+		select * from `order` where order_State &gt; 0 and order_user=#{id}
+	</select>
+	<select id="findOrderByUserAndState" resultMap="BaseResultMapJoinObj">
+		select * from `order` where order_State=#{0} and order_user=#{1}
+	</select>
+	<select id="findTotalMoneyByMonth" parameterType="java.lang.Integer" resultMap="Base">
+		select sum(order_Price) as totalMoney,date_format(order_Date, '%Y-%m') orderMonth, 
+		count(order_Id) as sheets from `order` group by orderMonth ORDER BY orderMonth asc LIMIT #{limit}
+	</select>
+	<select id="findTotalOrder" resultType="java.lang.Integer">
+		SELECT count(order_Id) total from `order`
+	</select>
+	<select id="findTotalDeliverOrder" resultType="java.lang.Integer">
+		select count(order_Id) num FROM `order` where order_State=2;
+	</select>
+  
+</mapper>

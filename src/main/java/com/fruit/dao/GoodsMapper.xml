@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fruit.dao.GoodsMapper">
+  <resultMap id="BaseResultMap" type="com.fruit.model.Goods">
+    <id column="goods_Id" jdbcType="INTEGER" property="goodsId" />
+    <result column="goods_Name" jdbcType="VARCHAR" property="goodsName" />
+    <result column="goods_Price" jdbcType="DOUBLE" property="goodsPrice" />
+    <result column="goods_Img" jdbcType="VARCHAR" property="goodsImg" />
+    <result column="goods_State" jdbcType="INTEGER" property="goodsState" />
+    <result column="goods_Desc" jdbcType="VARCHAR" property="goodsDesc" />
+    <result column="goods_volume" jdbcType="INTEGER" property="goodsVolume" />
+    <result column="goods_unit" jdbcType="VARCHAR" property="goodsUnit" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    goods_Id, goods_Name, goods_Price, goods_Img, goods_State, goods_Desc, goods_volume, 
+    goods_unit
+  </sql>
+   <select id="findAll" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from goods
+  </select>
+   <select id="findAllShow" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from goods
+   where  goods_State &gt; 0
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from goods
+    where goods_Id = #{goodsId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from goods
+    where goods_Id = #{goodsId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.fruit.model.Goods">
+    insert into goods (goods_Id, goods_Name, goods_Price, 
+      goods_Img, goods_State, goods_Desc, 
+      goods_volume, goods_unit)
+    values (#{goodsId,jdbcType=INTEGER}, #{goodsName,jdbcType=VARCHAR}, #{goodsPrice,jdbcType=DOUBLE}, 
+      #{goodsImg,jdbcType=VARCHAR}, #{goodsState,jdbcType=INTEGER}, #{goodsDesc,jdbcType=VARCHAR}, 
+      #{goodsVolume,jdbcType=INTEGER}, #{goodsUnit,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fruit.model.Goods">
+    insert into goods
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="goodsId != null">
+        goods_Id,
+      </if>
+      <if test="goodsName != null">
+        goods_Name,
+      </if>
+      <if test="goodsPrice != null">
+        goods_Price,
+      </if>
+      <if test="goodsImg != null">
+        goods_Img,
+      </if>
+      <if test="goodsState != null">
+        goods_State,
+      </if>
+      <if test="goodsDesc != null">
+        goods_Desc,
+      </if>
+      <if test="goodsVolume != null">
+        goods_volume,
+      </if>
+      <if test="goodsUnit != null">
+        goods_unit,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="goodsId != null">
+        #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsName != null">
+        #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsPrice != null">
+        #{goodsPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="goodsImg != null">
+        #{goodsImg,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsState != null">
+        #{goodsState,jdbcType=INTEGER},
+      </if>
+      <if test="goodsDesc != null">
+        #{goodsDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsVolume != null">
+        #{goodsVolume,jdbcType=INTEGER},
+      </if>
+      <if test="goodsUnit != null">
+        #{goodsUnit,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fruit.model.Goods">
+    update goods
+    <set>
+      <if test="goodsName != null">
+        goods_Name = #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsPrice != null">
+        goods_Price = #{goodsPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="goodsImg != null">
+        goods_Img = #{goodsImg,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsState != null">
+        goods_State = #{goodsState,jdbcType=INTEGER},
+      </if>
+      <if test="goodsDesc != null">
+        goods_Desc = #{goodsDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsVolume != null">
+        goods_volume = #{goodsVolume,jdbcType=INTEGER},
+      </if>
+      <if test="goodsUnit != null">
+        goods_unit = #{goodsUnit,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where goods_Id = #{goodsId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fruit.model.Goods">
+    update goods
+    set goods_Name = #{goodsName,jdbcType=VARCHAR},
+      goods_Price = #{goodsPrice,jdbcType=DOUBLE},
+      goods_Img = #{goodsImg,jdbcType=VARCHAR},
+      goods_State = #{goodsState,jdbcType=INTEGER},
+      goods_Desc = #{goodsDesc,jdbcType=VARCHAR},
+      goods_volume = #{goodsVolume,jdbcType=INTEGER},
+      goods_unit = #{goodsUnit,jdbcType=VARCHAR}
+    where goods_Id = #{goodsId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="changeGoodsState" parameterType="com.fruit.model.Goods">
+    update goods
+    set   goods_State = #{goodsState,jdbcType=INTEGER}
+    where goods_Id = #{goodsId,jdbcType=INTEGER}
+  </update>
+	<select id="findGoodsLikeName" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from goods where goods_Name like '%${value}%' and goods_State &gt; 0
+	</select>
+	<select id="findGoodsByVolume" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select * from goods where goods_State &gt; 0 order by goods_Volume desc limit #{limit}
+	</select>
+</mapper>

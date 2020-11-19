@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fruit.dao.OrderDetailMapper">
+  <resultMap id="BaseResultMap" type="com.fruit.model.OrderDetail">
+    <id column="detail_Id" jdbcType="INTEGER" property="detailId" />
+    <result column="detail_Order" jdbcType="VARCHAR" property="detailOrder.orderId" />
+    <result column="detail_Goods" jdbcType="INTEGER" property="detailGoods.goodsId" />
+    <result column="detail_Price" jdbcType="DOUBLE" property="detailPrice" />
+    <result column="detail_Num" jdbcType="INTEGER" property="detailNum" />
+  </resultMap>
+  <resultMap type="com.fruit.model.OrderDetail" id="BaseResultMapJoinObj" extends="BaseResultMap">
+		<association property="detailOrder" column="detail_Order" javaType="com.fruit.model.Order" select="com.fruit.dao.OrderMapper.selectByPrimaryKey"></association>
+		<association property="detailGoods" column="detail_Goods" javaType="com.fruit.model.Goods" select="com.fruit.dao.GoodsMapper.selectByPrimaryKey"></association>
+	</resultMap>
+  <sql id="Base_Column_List">
+    detail_Id, detail_Order_Goods.goodsId, detail_Price, detail_Num
+  </sql>
+  	<select id="findOrderDetailByOrderId" parameterType="java.lang.String" resultMap="BaseResultMapJoinObj">
+		select * from order_detail where detail_order=#{id}
+	</select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select  *
+    from order_detail
+    where detail_Id = #{detailId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from order_detail
+    where detail_Id = #{detailId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.fruit.model.OrderDetail">
+    insert into order_detail (detail_Id, detail_Order, detail_Goods, 
+      detail_Price, detail_Num)
+    values (#{detailId,jdbcType=INTEGER}, #{detailOrder.orderId,jdbcType=VARCHAR}, #{detailGoods.goodsId,jdbcType=INTEGER}, 
+      #{detailPrice,jdbcType=DOUBLE}, #{detailNum,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fruit.model.OrderDetail">
+    insert into order_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="detailId != null">
+        detail_Id,
+      </if>
+      <if test="detailOrder.orderId != null">
+        detail_Order,
+      </if>
+      <if test="detailGoods.goodsId != null">
+        detail_Goods,
+      </if>
+      <if test="detailPrice != null">
+        detail_Price,
+      </if>
+      <if test="detailNum != null">
+        detail_Num,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="detailId != null">
+        #{detailId,jdbcType=INTEGER},
+      </if>
+      <if test="detailOrder.orderId != null">
+        #{detailOrder.orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="detailGoods.goodsId != null">
+        #{detailGoods.goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="detailPrice != null">
+        #{detailPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="detailNum != null">
+        #{detailNum,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fruit.model.OrderDetail">
+    update order_detail
+    <set>
+      <if test="detailOrder.orderId != null">
+        detail_Order = #{detailOrder.orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="detailGoods.goodsId != null">
+        detail_Goods = #{detailGoods.goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="detailPrice != null">
+        detail_Price = #{detailPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="detailNum != null">
+        detail_Num = #{detailNum,jdbcType=INTEGER},
+      </if>
+    </set>
+    where detail_Id = #{detailId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fruit.model.OrderDetail">
+    update order_detail
+    set detail_Order = #{detailOrder.orderId,jdbcType=VARCHAR},
+      detail_Goods = #{detailGoods.goodsId,jdbcType=INTEGER},
+      detail_Price = #{detailPrice,jdbcType=DOUBLE},
+      detail_Num = #{detailNum,jdbcType=INTEGER}
+    where detail_Id = #{detailId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fruit.dao.ProvincesMapper">
+  <resultMap id="BaseResultMap" type="com.fruit.model.Provinces">
+    <id column="province_Id" jdbcType="VARCHAR" property="provinceId" />
+    <result column="province_Name" jdbcType="VARCHAR" property="provinceName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    province_Id, province_Name
+  </sql>
+  <select id="findAllProvince" resultMap="BaseResultMap">
+		select * from provinces
+	</select>
+	<select id="findProByProName" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from provinces where province_Name=#{name}
+	</select>
+	<select id="findProByProId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from provinces where province_Id=#{id}
+	</select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from provinces
+    where province_Id = #{provinceId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from provinces
+    where province_Id = #{provinceId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fruit.model.Provinces">
+    insert into provinces (province_Id, province_Name)
+    values (#{provinceId,jdbcType=VARCHAR}, #{provinceName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fruit.model.Provinces">
+    insert into provinces
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="provinceId != null">
+        province_Id,
+      </if>
+      <if test="provinceName != null">
+        province_Name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="provinceId != null">
+        #{provinceId,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceName != null">
+        #{provinceName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fruit.model.Provinces">
+    update provinces
+    <set>
+      <if test="provinceName != null">
+        province_Name = #{provinceName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where province_Id = #{provinceId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fruit.model.Provinces">
+    update provinces
+    set province_Name = #{provinceName,jdbcType=VARCHAR}
+    where province_Id = #{provinceId,jdbcType=VARCHAR}
+  </update>
+</mapper>

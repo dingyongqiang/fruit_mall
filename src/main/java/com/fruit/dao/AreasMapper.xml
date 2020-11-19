@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fruit.dao.AreasMapper">
+  <resultMap id="BaseResultMap" type="com.fruit.model.Areas">
+    <id column="area_Id" jdbcType="VARCHAR" property="areaId" />
+    <result column="area_Name" jdbcType="VARCHAR" property="areaName" />
+    <result column="city_Id" jdbcType="VARCHAR" property="cityId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    area_Id, area_Name, city_Id
+  </sql>
+  <select id="findAreasByCityId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from areas where city_Id=#{id}
+	</select>
+	<select id="findAreaByAreaName" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from areas where area_Name=#{0} and city_Id=#{1}
+	</select>
+	<select id="findAreaById" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from areas where area_Id=#{id}
+	</select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from areas
+    where area_Id = #{areaId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from areas
+    where area_Id = #{areaId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fruit.model.Areas">
+    insert into areas (area_Id, area_Name, city_Id
+      )
+    values (#{areaId,jdbcType=VARCHAR}, #{areaName,jdbcType=VARCHAR}, #{cityId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.fruit.model.Areas">
+    insert into areas
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="areaId != null">
+        area_Id,
+      </if>
+      <if test="areaName != null">
+        area_Name,
+      </if>
+      <if test="cityId != null">
+        city_Id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="areaId != null">
+        #{areaId,jdbcType=VARCHAR},
+      </if>
+      <if test="areaName != null">
+        #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null">
+        #{cityId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fruit.model.Areas">
+    update areas
+    <set>
+      <if test="areaName != null">
+        area_Name = #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null">
+        city_Id = #{cityId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where area_Id = #{areaId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fruit.model.Areas">
+    update areas
+    set area_Name = #{areaName,jdbcType=VARCHAR},
+      city_Id = #{cityId,jdbcType=VARCHAR}
+    where area_Id = #{areaId,jdbcType=VARCHAR}
+  </update>
+</mapper>
